@@ -1,0 +1,25 @@
+### Sign up
+POST http://localhost:42069/signup
+Content-Type: application/json
+
+{
+  "username": "test_user",
+  "password": "test_password123"
+}
+
+### Sign in
+GET http://localhost:42069/signin
+Content-Type: application/json
+
+{
+  "username": "test_user",
+  "password": "test_password123"
+}
+
+### Secret check
+GET http://localhost:42069/secret
+Authorization: Bearer {{token}}
+
+### Authorization
+GET http://localhost:42069/authenticate
+Authorization: Bearer {{token}}

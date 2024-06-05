@@ -1,13 +1,14 @@
 package com.evandhardspace
 
 import com.evandhardspace.data.user.MongoUserDataSource
-import com.evandhardspace.data.user.User
 import com.evandhardspace.plugins.*
+import com.evandhardspace.security.hashing.SHA256HashingService
+import com.evandhardspace.security.token.JwtTokenService
+import com.evandhardspace.security.token.TokenConfig
 import io.ktor.server.application.*
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import org.litote.kmongo.coroutine.coroutine
 import org.litote.kmongo.reactivestreams.KMongo
+import kotlin.time.Duration.Companion.days
 
 fun main(args: Array<String>) {
     io.ktor.server.netty.EngineMain.main(args)
@@ -22,17 +23,22 @@ fun Application.module() {
     ).coroutine.getDatabase(dbName)
 
     val userDataSource = MongoUserDataSource(db)
+    val tokenService = JwtTokenService()
+    val tokenConfig = TokenConfig(
+        issuer = environment.config.property("jwt.issuer").getString(),
+        audience = environment.config.property("jwt.audience").getString(),
+        expiresIn = 365.days.inWholeMilliseconds,
+        secret = System.getenv("JWT_SECRET"),
+    )
+    val hashService = SHA256HashingService()
 
-//    GlobalScope.launch {
-//        val user = User(
-//            userName = "test",
-//            password = "1234",
-//            salt = "salt"
-//        )
-//        userDataSource.insertUser(user)
-//    }
     configureSerialization()
     configureMonitoring()
-    configureSecurity()
-    configureRouting()
+    configureSecurity(tokenConfig)
+    configureRouting(
+        userDataSource,
+        hashService,
+        tokenService,
+        tokenConfig,
+    )
 }
