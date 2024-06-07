@@ -57,17 +57,17 @@ fun Route.signIn(
     tokenService: TokenService,
     tokenConfig: TokenConfig,
 ) {
-    get("signin") {
+    post("signin") {
         val request = runCatching { call.receive<AuthRequest>() }.getOrElse {
             call.respond(HttpStatusCode.BadRequest)
-            return@get
+            return@post
         }
 
         val user = userDataSource.getUserByUsername(request.username)
 
         if (user == null) {
             call.respond(HttpStatusCode.Conflict, "Incorrect username or password")
-            return@get
+            return@post
         }
 
         val isValidPassword = hashingService.verify(
@@ -80,7 +80,7 @@ fun Route.signIn(
 
         if (!isValidPassword) {
             call.respond(HttpStatusCode.Conflict, "Incorrect username or password")
-            return@get
+            return@post
         }
 
         val token = tokenService.generate(

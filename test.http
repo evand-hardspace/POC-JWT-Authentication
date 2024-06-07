@@ -1,5 +1,5 @@
 ### Sign up
-POST http://localhost:42069/signup
+POST http://localhost:8080/signup
 Content-Type: application/json
 
 {
@@ -8,7 +8,7 @@ Content-Type: application/json
 }
 
 ### Sign in
-GET http://localhost:42069/signin
+GET http://localhost:8080/signin
 Content-Type: application/json
 
 {
@@ -17,9 +17,12 @@ Content-Type: application/json
 }
 
 ### Secret check
-GET http://localhost:42069/secret
+GET http://localhost:8080/secret
 Authorization: Bearer {{token}}
 
 ### Authorization
-GET http://localhost:42069/authenticate
+GET http://localhost:8080/authenticate
 Authorization: Bearer {{token}}
+
+### Hello world
+GET http://localhost:8080/hello
