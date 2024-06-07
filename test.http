@@ -1,0 +1,28 @@
+### Sign up
+POST http://localhost:8080/signup
+Content-Type: application/json
+
+{
+  "username": "test_user",
+  "password": "test_password123"
+}
+
+### Sign in
+GET http://localhost:8080/signin
+Content-Type: application/json
+
+{
+  "username": "test_user",
+  "password": "test_password123"
+}
+
+### Secret check
+GET http://localhost:8080/secret
+Authorization: Bearer {{token}}
+
+### Authorization
+GET http://localhost:8080/authenticate
+Authorization: Bearer {{token}}
+
+### Hello world
+GET http://localhost:8080/hello
